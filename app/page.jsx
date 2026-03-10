@@ -60,7 +60,7 @@ const CuteButton = ({ children, onClick, className = "", href = "#" }) => {
   );
 
   if (onClick) {
-    return <a href={href} className="inline-block" onClick={onClick}>{inner}</a>;
+    return <div className="inline-block cursor-pointer" onClick={onClick}>{inner}</div>;
   }
 
   return href.startsWith('#') || href.startsWith('mailto') ? (
@@ -142,7 +142,10 @@ const PaperAirplane = ({ animationName, delay, duration }) => {
         style={{
           top: 0,
           left: 0,
-          animation: `${animationName} ${duration}s linear infinite`,
+          animationName: animationName,
+          animationDuration: `${duration}s`,
+          animationTimingFunction: "linear",
+          animationIterationCount: "infinite",
           animationDelay: `${delay}s`,
         }}
       >
@@ -206,6 +209,7 @@ const GuideAirplane = ({ targetId, startX, startY, startScrollY, onComplete }) =
 
       const currentX = u * u * startX + 2 * u * easedT * controlX + easedT * easedT * targetLeft;
       const currentY = u * u * startY + 2 * u * easedT * controlY + easedT * easedT * targetTop;
+      const currentScrollY = startScrollY + (targetScrollY - startScrollY) * easedT;
 
       const dx = 2 * u * (controlX - startX) + 2 * easedT * (targetLeft - controlX);
       const dy = 2 * u * (controlY - startY) + 2 * easedT * (targetTop - controlY);
@@ -213,7 +217,6 @@ const GuideAirplane = ({ targetId, startX, startY, startScrollY, onComplete }) =
 
       setPos({ x: currentX, y: currentY, rotation: angle });
       window.scrollTo(0, currentScrollY);
-      const currentScrollY = startScrollY + (targetScrollY - startScrollY) * easedT;
 
       const dist = Math.hypot(currentX - lastPos.current.x, currentY - lastPos.current.y);
       if (dist > 35) {
@@ -478,7 +481,7 @@ export default function App() {
               and I make things :)
             </p>
             <div className="flex justify-center">
-              <CuteButton href="#projects" onClick={(e) => flyToSection(e, 'projects')}>
+              <CuteButton onClick={(e) => flyToSection(e, 'projects')}>
                 See my work <ArrowRight strokeWidth={3} size={20} />
               </CuteButton>
             </div>
